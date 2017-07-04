@@ -222,64 +222,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
-    
-    /*
-     
-     /**
-     Implement this to provide a custom node for the given anchor.
-     
-     @discussion This node will automatically be added to the scene graph.
-     If this method is not implemented, a node will be automatically created.
-     If nil is returned the anchor will be ignored.
-     @param renderer The renderer that will render the scene.
-     @param anchor The added anchor.
-     @return Node that will be mapped to the anchor or nil.
-     */
-     optional public func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode?
-     
-     
-     /**
-     Called when a new node has been mapped to the given anchor.
-     
-     @param renderer The renderer that will render the scene.
-     @param node The node that maps to the anchor.
-     @param anchor The added anchor.
-     */
-     optional public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor)
-     
-     
-     /**
-     Called when a node will be updated with data from the given anchor.
-     
-     @param renderer The renderer that will render the scene.
-     @param node The node that will be updated.
-     @param anchor The anchor that was updated.
-     */
-     optional public func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor)
-     
-     
-     /**
-     Called when a node has been updated with data from the given anchor.
-     
-     @param renderer The renderer that will render the scene.
-     @param node The node that was updated.
-     @param anchor The anchor that was updated.
-     */
-     optional public func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor)
-     
-     
-     /**
-     Called when a mapped node has been removed from the scene graph for the given anchor.
-     
-     @param renderer The renderer that will render the scene.
-     @param node The node that was removed.
-     @param anchor The anchor that was removed.
-     */
-     optional public func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor)
-     
-     */
-    
-    
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
