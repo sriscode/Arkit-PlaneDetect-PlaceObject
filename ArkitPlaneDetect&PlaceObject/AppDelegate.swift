@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  ArkitPlaneDetect&PlaceObject
 //
-//  Created by Sri Adatrao on 7/3/17.
-//  Copyright © 2017 Sris. All rights reserved.
+//  Created by SA on 7/3/17.
+//  Copyright © 2017 SA. All rights reserved.
 //
 
 import UIKit

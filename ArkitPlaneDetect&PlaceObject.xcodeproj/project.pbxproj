@@ -12,6 +12,7 @@
 		101631D41F0B421300B998AC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 101631D21F0B421300B998AC /* Main.storyboard */; };
 		101631D61F0B421300B998AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 101631D51F0B421300B998AC /* Assets.xcassets */; };
 		101631D91F0B421300B998AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 101631D71F0B421300B998AC /* LaunchScreen.storyboard */; };
+		101631E11F0B43EB00B998AC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 101631E01F0B42AF00B998AC /* art.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		101631D51F0B421300B998AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		101631D81F0B421300B998AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		101631DA1F0B421300B998AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		101631E01F0B42AF00B998AC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				101631CE1F0B421300B998AC /* AppDelegate.swift */,
 				101631D01F0B421300B998AC /* ViewController.swift */,
 				101631D21F0B421300B998AC /* Main.storyboard */,
+				101631E01F0B42AF00B998AC /* art.scnassets */,
 				101631D51F0B421300B998AC /* Assets.xcassets */,
 				101631D71F0B421300B998AC /* LaunchScreen.storyboard */,
 				101631DA1F0B421300B998AC /* Info.plist */,
@@ -96,6 +99,7 @@
 				TargetAttributes = {
 					101631CA1F0B421300B998AC = {
 						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -123,6 +127,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				101631D91F0B421300B998AC /* LaunchScreen.storyboard in Resources */,
+				101631E11F0B43EB00B998AC /* art.scnassets in Resources */,
 				101631D61F0B421300B998AC /* Assets.xcassets in Resources */,
 				101631D41F0B421300B998AC /* Main.storyboard in Resources */,
 			);
@@ -269,10 +274,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ArkitPlaneDetect&PlaceObject/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Sris.ArkitPlaneDetect-PlaceObject";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -282,10 +290,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ArkitPlaneDetect&PlaceObject/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Sris.ArkitPlaneDetect-PlaceObject";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
