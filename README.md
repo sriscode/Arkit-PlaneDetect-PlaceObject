@@ -10,16 +10,15 @@ It covers the following features:
 
 Code for above implementation:
 
-
-enum menuButtonState: String {
+ enum menuButtonState: String {
     case start = "Tap here to start AR"
     case stop = "Stop tracking more planes"
     case select = "Tap plane to select"
     case reset = "Reset"
 }
 
-class ViewController: UIViewController, ARSCNViewDelegate {
-    
+ class ViewController: UIViewController, ARSCNViewDelegate {
+ 
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var statusLabel: UILabel!
