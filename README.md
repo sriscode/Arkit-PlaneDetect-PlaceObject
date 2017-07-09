@@ -1,7 +1,7 @@
 # Arkit-PlaneDetect-PlaceObject
 ARkit demo to detect plane and place objects
 This ARkit demo implement the iOS 11 arkit framework to detect planes and place objects on the selected plane.
-Demo to see uplaoded at https://youtu.be/rx_z8_P2TFQ
+Demo to see uploaded at https://youtu.be/rx_z8_P2TFQ
 
 It covers the following topics:
 
