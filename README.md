@@ -11,7 +11,7 @@ Compelete explanation of the code is available at  http://machinethinks.com/arki
 
 Movie demo uploaded at https://youtu.be/rx_z8_P2TFQ
 Screenshot of the output: 
-![ARkit Sample](https://github.com/sriscode/Arkit-PlaneDetect-PlaceObject/blob/master/ArkitPlaneDetect%26PlaceObject.png)
+![ARkit Sample](https://github.com/sriscode/Arkit-PlaneDetect-PlaceObject/blob/master/ArkitPlaneDetectPlaceObject-589x1024.png)
 
 
 
