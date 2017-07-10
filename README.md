@@ -7,7 +7,7 @@ It covers the following topics:
 2) Implements ARSCNViewDelegate to get the tracked planes,add plane, update planes, remove planes
 3) Places the 3d model on the tapped area on the selected node mapped to ARPlaneAnchor.
 
-Compelete explanation of the code is available at  http://machinethinks.com/arkit-detecting-…-placing-objects/
+Compelete explanation of the code is available at  http://machinethinks.com/arkit-detecting-planes-and-placing-objects/
 
 Movie demo uploaded at https://youtu.be/rx_z8_P2TFQ
 Screenshot of the output: 
