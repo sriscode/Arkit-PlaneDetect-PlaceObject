@@ -85,14 +85,6 @@ extension ViewController: ARSKViewDelegate {
      remove the anchor from the scene view here
      */
     func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-//        if let anchorForDelete = sceneView.anchor(for: node) {
-//            if let index  = anchors.index(where: { (anchor) -> Bool in
-//                anchor.identifier == anchorForDelete.identifier
-//            }) {
-//                anchors.remove(at: index)
-//            }
-//            sceneView.session.remove(anchor: anchorForDelete)
-//        }
     
     }
     
