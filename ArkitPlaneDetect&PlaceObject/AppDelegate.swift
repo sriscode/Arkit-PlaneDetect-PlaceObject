@@ -3,7 +3,7 @@
 //  ArkitPlaneDetect&PlaceObject
 //
 //  Created by SA on 7/3/17.
-//  Copyright © 2017 SA. All rights reserved.
+//  Copyright © 2017 Sris. All rights reserved.
 //
 
 import UIKit

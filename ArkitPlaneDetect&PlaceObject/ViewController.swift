@@ -3,209 +3,131 @@
 //  ArkitPlaneDetect&PlaceObject
 //
 //  Created by SA on 6/20/17.
-//  Copyright © 2017 SA. All rights reserved.
+//  Copyright © 2017 Sris. All rights reserved.
 //
 
 import UIKit
 import SceneKit
 import ARKit
 
-enum menuButtonState: String {
-    case start = "Tap here to start AR"
-    case stop = "Stop tracking more planes"
-    case select = "Tap plane to select"
-    case reset = "Reset"
-}
-
 class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet var sceneView: ARSCNView!
-    @IBOutlet weak var menuButton: UIButton!
-    @IBOutlet weak var statusLabel: UILabel!
-    
-    var arState = menuButtonState.start
-    var scene = SCNScene()
-    var configuration = ARWorldTrackingSessionConfiguration()
-    
-    var planeIdentifiers = [UUID]()
+    @IBOutlet weak var cameraStatusLabel: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var resetButton: UIButton!
+
+    var configuration : ARWorldTrackingConfiguration?
+    let planeIdentifiers = [UUID]()
     var anchors = [ARAnchor]()
     var nodes = [SCNNode]()
+    // keep track of number of anchor nodes that are added into the scene
     var planeNodesCount = 0
-    var planeHeight: CGFloat = 0.01
-    var disableTracking = false
+    let planeHeight: CGFloat = 0.01
+    // set isPlaneSelected to true when user taps on the anchor plane to select.
     var isPlaneSelected = false
+    // set isSessionPaused to true when user taps on Pause button
+    var isSessionPaused = false
     
+    // lampNode holds the object from scene. Clone this object and place it on the tapped location on the selected plane
     var lampNode: SCNNode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        initializeSceneView()
+        initializeMenuButtonStatus()
+        loadNodeObject()
+        initiateTracking()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        pauseSession()
+    }
+    
+    func initializeSceneView() {
         // Set the view's delegate
         sceneView.delegate = self
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
-        // Set the scene to the view
-        self.sceneView.scene = scene
-        self.sceneView.autoenablesDefaultLighting = true
+        // Create new scene and attach the scene to the sceneView
+        sceneView.scene = SCNScene()
         
-        self.sceneView.debugOptions  = [.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        sceneView.autoenablesDefaultLighting = true
+        
+        // Add the SCNDebugOptions options
+        // showConstraints, showLightExtents are SCNDebugOptions
+        // showFeaturePoints and showWorldOrigin are ARSCNDebugOptions
+        sceneView.debugOptions  = [SCNDebugOptions.showConstraints, SCNDebugOptions.showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         
         //shows fps rate
-        self.sceneView.showsStatistics = true
+        sceneView.showsStatistics = true
         
-        self.sceneView.automaticallyUpdatesLighting = true
-        menuButton.setTitle(arState.rawValue , for: .normal)
-        setUpScenesAndNodes()
+        sceneView.automaticallyUpdatesLighting = true
     }
     
-    func setUpScenesAndNodes() {
-        // load the lamp model from scene
+    func loadNodeObject() {
+        // get access to scene from scene assets and parse for the lamp model 
         let tempScene = SCNScene(named: "art.scnassets/Petroleum_Lamp/Petroleum_Lamp.dae")!
         lampNode = tempScene.rootNode.childNode(withName: "Lamp", recursively: true)!
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    func startSession() {
+        configuration = ARWorldTrackingConfiguration()
+        //currenly only planeDetection available is horizontal.
+        configuration!.planeDetection = ARWorldTrackingConfiguration.PlaneDetection.horizontal
+        sceneView.session.run(configuration!, options: [ARSession.RunOptions.removeExistingAnchors,
+                                                       ARSession.RunOptions.resetTracking])
         
     }
     
-    func setSessionConfiguration(pd : ARWorldTrackingSessionConfiguration.PlaneDetection,
-                                 runOPtions: ARSession.RunOptions) {
-        //currenly only planeDetection available is horizontal.
-        configuration.planeDetection = pd
-        sceneView.session.run(configuration, options: runOPtions)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    func pauseSession() {
         sceneView.session.pause()
     }
     
-    // MARK: - ARSCNViewDelegate
-    
-    /*Implement this to provide a custom node for the given anchor.
-     
-     @discussion This node will automatically be added to the scene graph.
-     If this method is not implemented, a node will be automatically created.
-     If nil is returned the anchor will be ignored.
-     @param renderer The renderer that will render the scene.
-     @param anchor The added anchor.
-     @return Node that will be mapped to the anchor or nil.
-     */
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        if disableTracking {
-            return nil
-        }
-        var node:  SCNNode?
-        if let planeAnchor = anchor as? ARPlaneAnchor {
-            node = SCNNode()
-            //            let planeGeometry = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
-            let planeGeometry = SCNBox(width: CGFloat(planeAnchor.extent.x), height: planeHeight, length: CGFloat(planeAnchor.extent.z), chamferRadius: 0.0)
-            planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
-            planeGeometry.firstMaterial?.specular.contents = UIColor.white
-            let planeNode = SCNNode(geometry: planeGeometry)
-            planeNode.position = SCNVector3Make(planeAnchor.center.x, Float(planeHeight / 2), planeAnchor.center.z)
-            //            since SCNPlane is vertical, needs to be rotated -90 degress on X axis to make a plane
-            //            planeNode.transform = SCNMatrix4MakeRotation(Float(-CGFloat.pi/2), 1, 0, 0)
-            node?.addChildNode(planeNode)
-            anchors.append(planeAnchor)
-            
-        } else {
-            // haven't encountered this scenario yet
-            print("not plane anchor \(anchor)")
-        }
-        return node
+    func continueSession() {
+        sceneView.session.run(configuration!)
     }
-    
-    // Called when a new node has been mapped to the given anchor
-    public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        planeNodesCount += 1
-        if node.childNodes.count > 0 && planeNodesCount % 2 == 0 {
-            node.childNodes[0].geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
-        }
-    }
-    
-    // Called when a node has been updated with data from the given anchor
-    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        if disableTracking {
-            return
-        }
-        if let planeAnchor = anchor as? ARPlaneAnchor {
-            if anchors.contains(planeAnchor) {
-                if node.childNodes.count > 0 {
-                    let planeNode = node.childNodes.first!
-                    planeNode.position = SCNVector3Make(planeAnchor.center.x, Float(planeHeight / 2), planeAnchor.center.z)
-                    if let plane = planeNode.geometry as? SCNBox {
-                        plane.width = CGFloat(planeAnchor.extent.x)
-                        plane.length = CGFloat(planeAnchor.extent.z)
-                        plane.height = planeHeight
-                    }
-                }
-            }
-        }
-    }
-    
-    /* Called when a mapped node has been removed from the scene graph for the given anchor.
-     This delegate did not got called for every node removal in this app. Still need to rearch on what I am missing.
-     */
-    func renderer(_ renderer: SCNSceneRenderer, didRemove node: SCNNode, for anchor: ARAnchor) {
-        print("remove node delegate called")
-    }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: sceneView)
-        
-        if arState == .select {
-            selectExistinPlane(location: location)
-        }
-        if arState == .reset && anchors.count > 0 {
-            let hitResults = sceneView.hitTest(location, types: .existingPlaneUsingExtent)
-            if hitResults.count > 0 {
-                let result: ARHitTestResult = hitResults.first!
-                
-                let newLocation = SCNVector3Make(result.worldTransform.columns.3.x, result.worldTransform.columns.3.y, result.worldTransform.columns.3.z)
-                let newLampNode = lampNode?.clone()
-                if let newLampNode = newLampNode {
-                    newLampNode.position = newLocation
-                    sceneView.scene.rootNode.addChildNode(newLampNode)
-                }
-            }
+        if !isPlaneSelected {
+            selectExistingPlane(location: location)
+        } else {
+            addNodeAtLocation(location: location)
         }
     }
     
-    func selectExistinPlane(location: CGPoint) {
+    // selects the anchor at the specified location and removes all other unused anchors
+    func selectExistingPlane(location: CGPoint) {
+        // Hit test result from intersecting with an existing plane anchor, taking into account the plane’s extent.
         let hitResults = sceneView.hitTest(location, types: .existingPlaneUsingExtent)
         if hitResults.count > 0 {
             let result: ARHitTestResult = hitResults.first!
             if let planeAnchor = result.anchor as? ARPlaneAnchor {
                 for var index in 0...anchors.count - 1 {
+                    // remove all the nodes from the scene except for the one that is selected
                     if anchors[index].identifier != planeAnchor.identifier {
                         sceneView.node(for: anchors[index])?.removeFromParentNode()
+                        sceneView.session.remove(anchor: anchors[index])
                     }
                     index += 1
                 }
+                // keep track of selected anchor only
                 anchors = [planeAnchor]
-                setPlaneTexture(node: sceneView.node(for: anchors[0])!)
+                // set isPlaneSelected to true
+                isPlaneSelected = true
+                setPlaneTexture(node: sceneView.node(for: planeAnchor)!)
             }
         }
-        
-    }
-    
-    func resetTapped() {
-        if anchors.count > 0 {
-            for index in 0...anchors.count - 1 {
-                sceneView.node(for: anchors[index])?.removeFromParentNode()
-            }
-            anchors.removeAll()
-        }
-        
-        for node in sceneView.scene.rootNode.childNodes {
-            node.removeFromParentNode()
-        }
-        
     }
     
     func setPlaneTexture(node: SCNNode) {
@@ -217,11 +139,46 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 geometryNode.geometry?.firstMaterial?.diffuse.wrapT = SCNWrapMode.repeat
                 geometryNode.geometry?.firstMaterial?.diffuse.mipFilter = SCNFilterMode.linear
             }
-            arState = menuButtonState.reset
-            menuButton.setTitle(menuButtonState.reset.rawValue, for: .normal)
         }
     }
     
+    // checks if anchors are already created. If created, clones the node and adds it the anchor at the specified location
+    func addNodeAtLocation(location: CGPoint) {
+        guard anchors.count > 0 else {
+            print("anchors are not created yet")
+            return
+        }
+        
+        let hitResults = sceneView.hitTest(location, types: .existingPlaneUsingExtent)
+        if hitResults.count > 0 {
+            let result: ARHitTestResult = hitResults.first!
+            let newLocation = SCNVector3Make(result.worldTransform.columns.3.x, result.worldTransform.columns.3.y, result.worldTransform.columns.3.z)
+            let newLampNode = lampNode?.clone()
+            if let newLampNode = newLampNode {
+                newLampNode.position = newLocation
+                sceneView.scene.rootNode.addChildNode(newLampNode)
+            }
+        }
+    }
+    
+    // removes all the nodes, anchors and resets the isPlaneSelected to false
+    func reset() {
+        isPlaneSelected = false
+        isSessionPaused = false
+        planeNodesCount = 0
+        if anchors.count > 0 {
+            for index in 0...anchors.count - 1 {
+                sceneView.node(for: anchors[index])?.removeFromParentNode()
+            }
+        }
+        anchors.removeAll()
+        for node in sceneView.scene.rootNode.childNodes {
+            node.removeFromParentNode()
+        }
+    }
+    
+    
+    // MARK: session delegates
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -240,48 +197,70 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
         switch camera.trackingState {
         case .normal:
-            statusLabel.text = "Normal"
+            cameraStatusLabel.text = "Normal"
         case .notAvailable:
-            statusLabel.text = "Not Available"
+            cameraStatusLabel.text = "Not Available"
         case .limited(let reason):
-            statusLabel.text = "Limited with reason: "
+            cameraStatusLabel.text = "Limited with reason: "
             switch reason {
             case .excessiveMotion:
-                statusLabel.text = statusLabel.text! + "excessive camera movement"
+                cameraStatusLabel.text = cameraStatusLabel.text! + "excessive camera movement"
             case .insufficientFeatures:
-                statusLabel.text = statusLabel.text! + "insufficient features"
+                cameraStatusLabel.text = cameraStatusLabel.text! + "insufficient features"
+            case .initializing:
+                cameraStatusLabel.text = cameraStatusLabel.text! + "camera initializing in progress"
             }
             
         }
     }
     
-    @IBAction func menuButtonTapped(_ sender: Any) {
-        switch arState {
-        case .start:
-            disableTracking = false
-            setSessionConfiguration(pd: ARWorldTrackingSessionConfiguration.PlaneDetection.horizontal, runOPtions: ARSession.RunOptions.resetTracking)
-            arState = .stop
-            menuButton.setTitle(menuButtonState.stop.rawValue, for: .normal)
-            
-        case .stop:
-            disableTracking = true
-            arState = menuButtonState.select
-            menuButton.setTitle(menuButtonState.select.rawValue, for: .normal)
-            
-        case .select:
-            arState = menuButtonState.reset
-            menuButton.setTitle(menuButtonState.reset.rawValue, for: .normal)
-            break
-        case .reset:
-            disableTracking = false
-            arState = .start
-            menuButton.setTitle(menuButtonState.start.rawValue, for: .normal)
-            resetTapped()
-            configuration = ARWorldTrackingSessionConfiguration()
-            break
-            
-        }
+    // MARK: Menu Buttons' Status and Actions
+    func initializeMenuButtonStatus() {
+        pauseButton.isHidden = false
+        resetButton.isHidden = false
+        infoLabel.text = ""
+        pauseButton.setTitle("Pause", for: .normal)
     }
+    
+    func initiateTracking() {
+        // information to "select plane and tap on plane to place object" is visible for 10 seconds
+        infoLabel.text = "Once planes are detected, tap on any of the plane to select and then tap on the selected plane to place objects"
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { (s) in
+            DispatchQueue.main.async {
+                self.infoLabel.text = ""
+            }
+        }
+        startSession()
+    }
+    
+    @IBAction func pauseButtonTapped(_ sender: Any) {
+        pauseButton.isHidden = false
+        resetButton.isHidden = false
+        
+        // toggle button title to continue or pause
+        let buttonTitle = isSessionPaused ? "Pause" : "Continue"
+        self.pauseButton.setTitle(buttonTitle, for: .normal)
+      
+        if isSessionPaused {
+            isSessionPaused = false
+            continueSession()
+        } else {
+            isSessionPaused = true
+            pauseSession()
+        }
+        
+    }
+    
+    @IBAction func resetButtonTapped(_ sender: Any) {
+        pauseButton.isHidden = false
+        resetButton.isHidden = false
+        pauseButton.setTitle("Pause", for: .normal)
+        infoLabel.text = ""
+        reset()
+        initiateTracking()
+    }
+    
+   
     
 }
 

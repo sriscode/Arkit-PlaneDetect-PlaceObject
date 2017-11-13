@@ -13,6 +13,7 @@
 		101631D61F0B421300B998AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 101631D51F0B421300B998AC /* Assets.xcassets */; };
 		101631D91F0B421300B998AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 101631D71F0B421300B998AC /* LaunchScreen.storyboard */; };
 		101631E11F0B43EB00B998AC /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 101631E01F0B42AF00B998AC /* art.scnassets */; };
+		10FCAB851FB922020042A926 /* ViewController+ARViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FCAB841FB922020042A926 /* ViewController+ARViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		101631D81F0B421300B998AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		101631DA1F0B421300B998AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		101631E01F0B42AF00B998AC /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		10FCAB841FB922020042A926 /* ViewController+ARViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARViewDelegate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			children = (
 				101631CE1F0B421300B998AC /* AppDelegate.swift */,
 				101631D01F0B421300B998AC /* ViewController.swift */,
+				10FCAB841FB922020042A926 /* ViewController+ARViewDelegate.swift */,
 				101631D21F0B421300B998AC /* Main.storyboard */,
 				101631E01F0B42AF00B998AC /* art.scnassets */,
 				101631D51F0B421300B998AC /* Assets.xcassets */,
@@ -140,6 +143,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10FCAB851FB922020042A926 /* ViewController+ARViewDelegate.swift in Sources */,
 				101631D11F0B421300B998AC /* ViewController.swift in Sources */,
 				101631CF1F0B421300B998AC /* AppDelegate.swift in Sources */,
 			);
@@ -274,6 +278,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ArkitPlaneDetect&PlaceObject/Info.plist";
@@ -290,6 +295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ArkitPlaneDetect&PlaceObject/Info.plist";
@@ -321,6 +327,7 @@
 				101631DF1F0B421300B998AC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
